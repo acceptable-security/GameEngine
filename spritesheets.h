@@ -18,8 +18,8 @@ STAY GOLDEN
 #include <Box2D/Box2D.h>
 #include <glut.h>
 
-#ifndef sprites
-#define sprites
+//#ifndef sprites
+//#define sprites
 #define GL_CLAMP_TO_EDGE 0x812f
 
 class SpriteSheet {
@@ -39,15 +39,16 @@ class SpriteSheet {
 		virtual ~SpriteSheet();
 
 		void setFrameNum(std::string sequence, int frame);
+		b2Vec2 getSequenceSize(std::string sequence);
 
 		void initSequence(std::string, float frametime, float width, float height);
 		void addAnimationRow(std::string, int row, int size);
 		void addSequenceFrame(std::string sequence, b2Vec2 position);
 		
-		void renderPart(std::vector<b2Vec2> texCoords, int x, int y, float angle, float scale);
+		void renderPart(std::vector<b2Vec2> texCoords, int x, int y, float angle, float scale, b2Vec2 size);
 		void render(std::string sequence, int x, int y, float angle, float scale);
 		void renderFrame(std::string sequence, int frame, int x, int y, float angle, float scale);
 };
-#else
-class SpriteSheet;
-#endif
+//#else
+//class SpriteSheet;
+//#endif

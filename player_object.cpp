@@ -1,9 +1,26 @@
+/*
+TO DO:
+spritesheets.
+dundundun
+*/
+
 #include <Box2D/Box2D.h>
-#include <glut.h>
 #include "player_object.h"
+#include <glut.h>
+
 //int PI = 3.14159265f;
 static float ratio = 40.0f;
-PlayerObject::PlayerObject(int _width, int _height, float _x, float _y, float _r, float _g, float _b, b2World* world, int wWidth, int wHeight) {
+PlayerObject::PlayerObject() {
+}
+PlayerObject::PlayerObject(SpriteSheet* _sprites, float _scale, float _x, float _y, b2World* world, int wWidth, int wHeight) {
+	int _width, _height;
+	b2Vec2 size = _sprites->getSequenceSize("idle");
+	sprites = *_sprites;
+	_width = _sprites->getSequenceSize("idle").x * _scale;
+	_height = _sprites->getSequenceSize("idle").y  * _scale;
+
+	scale = _scale;
+
 	state = "idle";
 	direction = "right";
 	
@@ -25,13 +42,6 @@ PlayerObject::PlayerObject(int _width, int _height, float _x, float _y, float _r
 	fixtureDef.friction = 5.0f;
 
 	body->CreateFixture(&fixtureDef);
-
-	r = _r;
-	g = _g;
-	b = _b;
-	
-	width = _width;
-	height = _height;
 	
 	x = _x;
 	y = _y;
@@ -70,11 +80,11 @@ void PlayerObject::update(bool up, bool down, bool left, bool right) {
 	}
 
 	if(vel.x > 1.0f) {
-		state = "move";
+		state = "run";
 		direction = "right";
 	}
 	if(vel.x < -1.0f) {
-		state = "move";
+		state = "run";
 		direction = "left";
 	}
 	//printf("%s %s\n", state, direction);
@@ -88,31 +98,20 @@ void PlayerObject::SetPosition(int _x, int _y) {
 	body->SetTransform(b2Vec2(_x/ratio, _y/ratio), body->GetAngle());
 }
 
-void PlayerObject::resize(int _width, int _height) { 
-	width = _width;
-	height = _height;
-	
+void PlayerObject::resize(float _scale) { 
+	scale = _scale;
+	int _width, _height;
+	_width = sprites.getSequenceSize("idle").x * scale;
+	_height = sprites.getSequenceSize("idle").y  * scale;
 	box.SetAsBox((_width/2.0)/ratio, (_height/2.0)/ratio);
 }
 
 void PlayerObject::debug() {
-	printf("RECT (%d, %d, %d, %d)\n", x, y, width, height);
+	printf("RECT (%d, %d, %s, %s)\n", x, y, state, direction);
 }
 
-void PlayerObject::render() {
+void PlayerObject::render() { //void render(std::string sequence, int x, int y, float angle, float scale);
 	x = body->GetPosition().x*ratio;
-	y = body->GetPosition().y*ratio;
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	
-	glTranslatef(x, y, 0.0f);
-	glRotatef(body->GetAngle() * (180.0f / 3.14159265f), 0.0f, 0.0f, 1.0f);
-	glBegin(GL_QUADS);
-	glColor3f(r, g, b);
-	glVertex2f(0.0,0.0);
-	glVertex2f(width,0.0);
-	glVertex2f(width,height);
-	glVertex2f(0.0,height);
-	glEnd();
+	y = body->GetPosition().y*ratio; // 
+	sprites.render(state, x, y, body->GetAngle() * (180.0f / 3.14159265f), scale);
 }

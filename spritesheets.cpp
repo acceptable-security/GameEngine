@@ -25,8 +25,8 @@ SpriteSheet::SpriteSheet(const char* filename) {
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	//printf("TexID: %i\nValid: %s\nError: %s\n", textureID, glIsTexture(textureID) ? "true" : "false", gluErrorString(glGetError()));
 
@@ -48,7 +48,7 @@ void SpriteSheet::initSequence(std::string sequence, float frametime, float widt
 }
 
 void SpriteSheet::addAnimationRow(std::string sequence, int row, int size) {
-	int y = frameSize[sequence].y * row;
+	int y = row;
 	for(int i = 0;i < size; i++) {
 		addSequenceFrame(sequence, b2Vec2(i * frameSize[sequence].x, y));
 	}
@@ -58,14 +58,26 @@ void SpriteSheet::setFrameNum(std::string sequence, int frame) {
 	frameNumber[sequence] = frame % spriteMap[sequence].size();
 }
 
+b2Vec2 SpriteSheet::getSequenceSize(std::string sequence) {
+	return frameSize[sequence];
+}
+
 void SpriteSheet::addSequenceFrame(std::string sequence, b2Vec2 position) {
 	float a2 = frameSize[sequence].x / width;
 	float b2 = frameSize[sequence].y / height;
 	
-	b2Vec2 A = b2Vec2(position.x*a2,position.y*b2);
-	b2Vec2 B = b2Vec2(A.x + a2, A.y + b2);
-	b2Vec2 C = b2Vec2(B.x, A.y);
-	b2Vec2 D = b2Vec2(A.x, C.y);
+	float c2 = position.x / width;
+	float d2 = position.y / height;
+
+	/*b2Vec2 A = b2Vec2(c2, d2);
+	b2Vec2 B = b2Vec2(c2, d2 + b2);
+	b2Vec2 C = b2Vec2(c2 + a2, d2 + b2);
+	b2Vec2 D = b2Vec2(c2 + a2, d2);*/
+
+	b2Vec2 D = b2Vec2((position.x/frameSize[sequence].x)*a2,(position.y)*b2);
+	b2Vec2 B = b2Vec2(D.x + a2, D.y + b2);
+	b2Vec2 A = b2Vec2(D.x, B.y);
+	b2Vec2 C = b2Vec2(B.x, D.y);
 
 	std::vector<b2Vec2> corners;
 	corners.push_back(A);
@@ -73,10 +85,9 @@ void SpriteSheet::addSequenceFrame(std::string sequence, b2Vec2 position) {
 	corners.push_back(C);
 	corners.push_back(D);
 	spriteMap[sequence].push_back(corners);
-
 }
 
-void SpriteSheet::renderPart(std::vector<b2Vec2> texCoords, int x, int y, float angle, float scale) {
+void SpriteSheet::renderPart(std::vector<b2Vec2> texCoords, int x, int y, float angle, float scale, b2Vec2 size) {
 	if( textureID != 0 )
 	{
 		glMatrixMode(GL_MODELVIEW);
@@ -90,11 +101,10 @@ void SpriteSheet::renderPart(std::vector<b2Vec2> texCoords, int x, int y, float 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBindTexture( GL_TEXTURE_2D, textureID );
 		glBegin( GL_QUADS );
-
-				glTexCoord2f( texCoords[0].x, texCoords[0].y ); glVertex2f(        0.0f,         0.0f );
-				glTexCoord2f( texCoords[1].x, texCoords[1].y ); glVertex2f( width*scale,         0.0f );
-				glTexCoord2f( texCoords[2].x, texCoords[2].y ); glVertex2f( width*scale, height*scale );
-				glTexCoord2f( texCoords[3].x, texCoords[3].y ); glVertex2f(        0.0f, height*scale );
+				glTexCoord2f( texCoords[0].x, texCoords[0].y ); glVertex2f(         0.0f,         0.0f );
+				glTexCoord2f( texCoords[1].x, texCoords[1].y ); glVertex2f( size.x*scale,         0.0f );
+				glTexCoord2f( texCoords[2].x, texCoords[2].y ); glVertex2f( size.x*scale, size.y*scale );
+				glTexCoord2f( texCoords[3].x, texCoords[3].y ); glVertex2f(         0.0f, size.y*scale );
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
@@ -104,7 +114,7 @@ void SpriteSheet::renderPart(std::vector<b2Vec2> texCoords, int x, int y, float 
 
 void SpriteSheet::renderFrame(std::string animation, int frame, int x, int y, float angle, float scale) {
 	if(frame < spriteMap[animation].size())
-		renderPart(spriteMap[animation][frame], x, y, angle, scale);
+		renderPart(spriteMap[animation][frame], x, y, angle, scale, frameSize[animation]);
 }
 
 void SpriteSheet::render(std::string animation, int x, int y, float angle, float scale) {
@@ -122,5 +132,5 @@ void SpriteSheet::render(std::string animation, int x, int y, float angle, float
 		}
 		basetime[animation] = time;
 	}
-	renderPart(spriteMap[animation][curr], x, y, angle, scale);
+	renderPart(spriteMap[animation][curr], x, y, angle, scale, frameSize[animation]);
 }

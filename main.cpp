@@ -3,7 +3,6 @@
 #include <Math.h>
 #include <Box2D/Box2D.h>
 #include "player_object.h"
-#include "spritesheets.h"
 #include "render_list.h"
 
 #define PI 3.14159265f
@@ -27,10 +26,9 @@ int frames = 0;
 
 b2Vec2 gravity(0.0f, -10.0f);
 b2World world(gravity);
-
-PlayerObject player(25.0f, 25.0f, 50.0f, 300.0f, 1.0f, 0.0f, 1.0f, &world, windowWidth, windowHeight);
+PlayerObject player;
 RenderList renderList;
-SpriteSheet sprite;
+//SpriteSheet sprite;
 
 bool fullScreenMode = false;
 
@@ -51,7 +49,7 @@ void CalculateFrameRate()
 }
 
 void addMoreBlocks(int x, int y) {
-	DynamicObject* obj = new DynamicObject("box.png", 1.0f, b2Vec2(x,y), &world, windowWidth, windowHeight);
+	DynamicObject* obj = new DynamicObject("blue_square.png", 4.0f, b2Vec2(x,y), &world, windowWidth, windowHeight);
 	renderList.add(obj);
 }
 
@@ -63,7 +61,7 @@ void display() {
 
 	player.update(keys[0], keys[1], keys[2], keys[3]);
 	renderList.render();
-	sprite.render("test", 100.0f, 100.0f, 0.0f, 1.0f);
+	//sprite.render("run", 100.0f, 100.0f, 0.0f, 7.0f);
 	player.render();
 
 	glutSwapBuffers();
@@ -181,7 +179,7 @@ void initGL(int argc, char** argv) {
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
 	glOrtho(0.0f,windowWidth,0.0f,windowHeight,0.0f,1.0f);
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(0.3, 0.3, 0.3, 0.3);
 	GLenum error = glGetError();
 	if(error != GL_NO_ERROR) {
 		printf( "Error initializing OpenGL! %s\n", gluErrorString( error ) );
@@ -190,12 +188,17 @@ void initGL(int argc, char** argv) {
 }
 
 void initGame() {
-	renderList.add(createStaticObject(b2Vec2(10,10), "box.png", 2.0f));
-	sprite = "box.png";
-	sprite.initSequence("test", 1000.0f, 35.0f, 35.0f);
-	sprite.addAnimationRow("test", 0, 2);
-	//sprite.addSequenceFrame("test", b2Vec2(0.0f, 0.0f));
-	//sprite.addSequenceFrame("test", b2Vec2(35.0f, 35.0f));
+	renderList.add(createStaticObject(b2Vec2(10,10), "blue_square.png", 50.0f));
+	SpriteSheet sprite("spritesheet.png");
+	sprite.initSequence("idle", 60.0f, 9.0f, 14.0f);
+	sprite.initSequence("run", 60.0f, 9.0f, 14.0f);
+	sprite.initSequence("jump", 60.0f, 9.0f, 14.0f);
+	sprite.initSequence("fall", 60.0f, 9.0f, 14.0f);
+	sprite.addAnimationRow("idle", 0, 1);
+	sprite.addAnimationRow("run", 1, 9);
+	sprite.addAnimationRow("jump", 2, 1);
+	sprite.addAnimationRow("fall", 2, 1);
+	player = PlayerObject(&sprite, 2.0f, 50.0f, 300.0f, &world, windowWidth, windowHeight);
 }
 
 int main(int argc, char** argv) {
