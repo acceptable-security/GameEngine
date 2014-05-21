@@ -25,7 +25,7 @@ PlayerObject::PlayerObject(SpriteSheet* _sprites, float _scale, float _x, float 
 	direction = "right";
 	
 	bodyDef.type = b2_dynamicBody;
-	bodyDef.linearDamping = 1.0f;
+	bodyDef.linearDamping = 2.0f;
 	bodyDef.fixedRotation = true;
 	bodyDef.position.Set(_x/ratio, _y/ratio);
 
@@ -113,5 +113,12 @@ void PlayerObject::debug() {
 void PlayerObject::render() { //void render(std::string sequence, int x, int y, float angle, float scale);
 	x = body->GetPosition().x*ratio;
 	y = body->GetPosition().y*ratio; // 
-	sprites.render(state, x, y, body->GetAngle() * (180.0f / 3.14159265f), scale);
+	if(direction == "right")
+		sprites.render(state, x, y, body->GetAngle() * (180.0f / 3.14159265f), scale, false);
+	else
+		sprites.render(state, x, y, body->GetAngle() * (180.0f / 3.14159265f), scale, true);
+}
+
+void PlayerObject::clean() {
+	//do something
 }

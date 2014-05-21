@@ -2,14 +2,12 @@
 #include <glut.h>
 #include <Math.h>
 #include <Box2D/Box2D.h>
-#include "player_object.h"
-#include "render_list.h"
+#include "world.h"
 
 #define PI 3.14159265f
 
-
 // Global variables
-char title[] = "Blockland Forums: The Game";
+char title[] = "Neglect";
 int originalWindowWidth = 640;
 int originalWindowHeight = 480;
 int windowWidth  = originalWindowWidth;
@@ -23,17 +21,12 @@ int base_time = 0;
 int fps = 0;
 int frames = 0;
 
-
-b2Vec2 gravity(0.0f, -10.0f);
-b2World world(gravity);
-PlayerObject player;
-RenderList renderList;
-//SpriteSheet sprite;
+World universe;
 
 bool fullScreenMode = false;
 
 StaticObject* createStaticObject(b2Vec2 position, const char* imageFile, float scale) { //
-	return new StaticObject(imageFile, scale, position, &world, windowWidth, windowHeight);
+	return new StaticObject(imageFile, scale, position, universe.getWorld(), windowWidth, windowHeight);
 }
 
 void CalculateFrameRate()
@@ -48,24 +41,18 @@ void CalculateFrameRate()
 	}
 }
 
-void addMoreBlocks(int x, int y) {
-	DynamicObject* obj = new DynamicObject("blue_square.png", 4.0f, b2Vec2(x,y), &world, windowWidth, windowHeight);
-	renderList.add(obj);
-}
 
 void display() {
 	frames++;
 	CalculateFrameRate();
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
-
-	player.update(keys[0], keys[1], keys[2], keys[3]);
-	renderList.render();
-	//sprite.render("run", 100.0f, 100.0f, 0.0f, 7.0f);
-	player.render();
+	
+	universe.update(keys[0], keys[1], keys[2], keys[3]);
+	universe.render();
 
 	glutSwapBuffers();
-	world.Step(1.0f/60.0f, 6, 2);
+	
 }
  
 void reshape(GLsizei width, GLsizei height) {
@@ -143,7 +130,7 @@ void specialKeys(int key, int x, int y) {
 				glutPositionWindow(windowPosX, windowPosX);
 			}
 			break;
-		case GLUT_KEY_RIGHT:
+		/*case GLUT_KEY_RIGHT:
 			printf("RIGHT\n");
 			keys[3] = true;
 			break;
@@ -158,7 +145,7 @@ void specialKeys(int key, int x, int y) {
 		case GLUT_KEY_DOWN:
 			printf("DOWN\n");
 			keys[1] = true; 
-			break;
+			break;*/
 		case GLUT_KEY_PAGE_UP:
 			//page up
 			break;
@@ -170,7 +157,7 @@ void specialKeys(int key, int x, int y) {
  
 void mouse(int button, int state, int x, int y) {
 	if(!state) {
-		addMoreBlocks(x, windowHeight - y);
+		//addMoreBlocks(x, windowHeight - y);
 		printf("Mouse clicked %d (%d,%d)\n", state, x, y);
 	}
 }
@@ -188,20 +175,25 @@ void initGL(int argc, char** argv) {
 }
 
 void initGame() {
-	renderList.add(createStaticObject(b2Vec2(10,10), "blue_square.png", 50.0f));
+	universe.addObject(createStaticObject(b2Vec2(10,10), "blue_square.png", 100.0f));
+
 	SpriteSheet sprite("spritesheet.png");
+	
 	sprite.initSequence("idle", 60.0f, 9.0f, 14.0f);
 	sprite.initSequence("run", 60.0f, 9.0f, 14.0f);
 	sprite.initSequence("jump", 60.0f, 9.0f, 14.0f);
 	sprite.initSequence("fall", 60.0f, 9.0f, 14.0f);
+	
 	sprite.addAnimationRow("idle", 0, 1);
 	sprite.addAnimationRow("run", 1, 9);
 	sprite.addAnimationRow("jump", 2, 1);
 	sprite.addAnimationRow("fall", 2, 1);
-	player = PlayerObject(&sprite, 2.0f, 50.0f, 300.0f, &world, windowWidth, windowHeight);
+	
+	universe.setActivatePlayer(new PlayerObject(&sprite, 2.0f, 50.0f, 300.0f, universe.getWorld(), windowWidth, windowHeight));
 }
 
 int main(int argc, char** argv) {
+
 	keys[0] = false;
 	keys[1] = false;
 	keys[2] = false;
@@ -229,7 +221,6 @@ int main(int argc, char** argv) {
 	initGame();
 	
 	glutMainLoop();
-	printf("TEST");
 	return 0;
 }
 

@@ -87,7 +87,7 @@ void SpriteSheet::addSequenceFrame(std::string sequence, b2Vec2 position) {
 	spriteMap[sequence].push_back(corners);
 }
 
-void SpriteSheet::renderPart(std::vector<b2Vec2> texCoords, int x, int y, float angle, float scale, b2Vec2 size) {
+void SpriteSheet::renderPart(std::vector<b2Vec2> texCoords, int x, int y, float angle, float scale, b2Vec2 size, bool flip) {
 	if( textureID != 0 )
 	{
 		glMatrixMode(GL_MODELVIEW);
@@ -100,24 +100,34 @@ void SpriteSheet::renderPart(std::vector<b2Vec2> texCoords, int x, int y, float 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBindTexture( GL_TEXTURE_2D, textureID );
-		glBegin( GL_QUADS );
-				glTexCoord2f( texCoords[0].x, texCoords[0].y ); glVertex2f(         0.0f,         0.0f );
-				glTexCoord2f( texCoords[1].x, texCoords[1].y ); glVertex2f( size.x*scale,         0.0f );
-				glTexCoord2f( texCoords[2].x, texCoords[2].y ); glVertex2f( size.x*scale, size.y*scale );
-				glTexCoord2f( texCoords[3].x, texCoords[3].y ); glVertex2f(         0.0f, size.y*scale );
-		glEnd();
+		glBegin( GL_QUADS ); 
+		if(!flip) {
+			glTexCoord2f( texCoords[0].x, texCoords[0].y ); glVertex2f(         0.0f,         0.0f );
+			glTexCoord2f( texCoords[1].x, texCoords[1].y ); glVertex2f( size.x*scale,         0.0f );
+			glTexCoord2f( texCoords[2].x, texCoords[2].y ); glVertex2f( size.x*scale, size.y*scale );
+			glTexCoord2f( texCoords[3].x, texCoords[3].y ); glVertex2f(         0.0f, size.y*scale );
+			glEnd();
+		}
+		else {
+			float tex = 1.0f - texCoords[0].x;
+			glTexCoord2f( texCoords[1].x, texCoords[1].y ); glVertex2f(         0.0f,         0.0f );
+			glTexCoord2f( texCoords[0].x, texCoords[0].y ); glVertex2f( size.x*scale,         0.0f );
+			glTexCoord2f( texCoords[3].x, texCoords[3].y ); glVertex2f( size.x*scale, size.y*scale );
+			glTexCoord2f( texCoords[2].x, texCoords[2].y ); glVertex2f(         0.0f, size.y*scale );
+			glEnd();	
+		}
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
 		glPopMatrix();
 	}
 }
 
-void SpriteSheet::renderFrame(std::string animation, int frame, int x, int y, float angle, float scale) {
+void SpriteSheet::renderFrame(std::string animation, int frame, int x, int y, float angle, float scale, bool flip) {
 	if(frame < spriteMap[animation].size())
-		renderPart(spriteMap[animation][frame], x, y, angle, scale, frameSize[animation]);
+		renderPart(spriteMap[animation][frame], x, y, angle, scale, frameSize[animation], flip);
 }
 
-void SpriteSheet::render(std::string animation, int x, int y, float angle, float scale) {
+void SpriteSheet::render(std::string animation, int x, int y, float angle, float scale, bool flip) {
 	int size = spriteMap[animation].size();
 
 	int curr = frameNumber[animation];
@@ -132,5 +142,5 @@ void SpriteSheet::render(std::string animation, int x, int y, float angle, float
 		}
 		basetime[animation] = time;
 	}
-	renderPart(spriteMap[animation][curr], x, y, angle, scale, frameSize[animation]);
+	renderPart(spriteMap[animation][curr], x, y, angle, scale, frameSize[animation], flip);
 }

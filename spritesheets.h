@@ -45,9 +45,9 @@ class SpriteSheet {
 		void addAnimationRow(std::string, int row, int size);
 		void addSequenceFrame(std::string sequence, b2Vec2 position);
 		
-		void renderPart(std::vector<b2Vec2> texCoords, int x, int y, float angle, float scale, b2Vec2 size);
-		void render(std::string sequence, int x, int y, float angle, float scale);
-		void renderFrame(std::string sequence, int frame, int x, int y, float angle, float scale);
+		void renderPart(std::vector<b2Vec2> texCoords, int x, int y, float angle, float scale, b2Vec2 size, bool flip);
+		void render(std::string sequence, int x, int y, float angle, float scale, bool flip);
+		void renderFrame(std::string sequence, int frame, int x, int y, float angle, float scale, bool flip);
 };
 //#else
 //class SpriteSheet;
