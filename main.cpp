@@ -1,8 +1,5 @@
 #include <stdlib.h>
-#include <glut.h>
-#include <Math.h>
-#include <Box2D/Box2D.h>
-#include "world.h"
+#include "game.h"
 
 #define PI 3.14159265f
 
