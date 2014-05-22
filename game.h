@@ -35,6 +35,7 @@ namespace GameEngine {
 			Game(char* title, int windowWidth, int windowHeight, int argc, char** argv);
 	
 			void begin();
+			void initGL();
 			void initGame();
 	
 			void keyboardDown(unsigned char key, int x, int y);
@@ -48,8 +49,7 @@ namespace GameEngine {
 			void reshape(GLsizei width, GLsizei height);
 	
 			void calculateFrameRate();
-			void getFrameRate();
+			float getFrameRate();
 	};
-	Game gameObject;
 	Game NewGame(char* title, int windowWidth, int windowHeight, int argc, char** argv);
 }
