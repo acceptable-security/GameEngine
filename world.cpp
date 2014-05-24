@@ -14,11 +14,12 @@ namespace GameEngine {
 	}
 	
 	void World::setActivatePlayer(PlayerObject* player) {
+		printf("Q %d\n", this);
 		activeplayer = player;
 	}
 	
 	void World::update(bool up, bool down, bool left, bool right) {
-		printf("%d\n", this);
+		printf("R %d\n", this);
 		world->Step(1.0f/60.0f, 6, 2);
 		activeplayer->update(up, down, left, right);
 	}

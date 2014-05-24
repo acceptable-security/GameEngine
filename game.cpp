@@ -3,7 +3,6 @@ namespace GameEngine {
 	Game gameObject;
 
 	void _display_redirect() {
-		printf("ABC %d\n", &gameObject);
 		gameObject.display();
 	}
  
@@ -95,6 +94,7 @@ namespace GameEngine {
 			printf( "Error initializing OpenGL! %s\n", gluErrorString( error ) );
 			exit(0);
 		}
+		printf("A %d\n", &universe);
 		glutMainLoop();
 	}
 
@@ -196,6 +196,7 @@ namespace GameEngine {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_PROJECTION);
 	
+		printf("B %d\n", &universe);
 		universe.update(keys[0], keys[1], keys[2], keys[3]);
 		universe.render();
 

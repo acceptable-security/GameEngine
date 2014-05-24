@@ -51,12 +51,10 @@ namespace GameEngine {
 		winHeight = wHeight;
 	
 		//termX = body->GetMass() * 1.5f;
-		printf("%d %d\n", this, body);
 	}
 
 	void PlayerObject::update(bool up, bool down, bool left, bool right) {
-		printf("%d\n", this);
-		printf("%d %d\n", this, body);
+		printf("STD %d\n", this);
 		b2Vec2 linVel = body->GetLinearVelocity();
 		if(up) {
 			if(linVel.y == 0) {

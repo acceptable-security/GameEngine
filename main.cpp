@@ -1,12 +1,12 @@
 #include "game.h"
 
-GameEngine::Game game;
+GameEngine::Game* game;
 
 int main(int argc, char** argv) {
-	game = GameEngine::NewGame("Neglect", 640, 480, argc, argv);
-	game.initGL();
-	game.initGame();
-		game.getWorld()->addObject(new GameEngine::StaticObject("blue_square.png", 100.0f, b2Vec2(10,10), game.getWorld()->getWorld(), 640, 480));
+	game = &GameEngine::NewGame("Neglect", 640, 480, argc, argv);
+	game->initGL();
+	game->initGame();
+		game->getWorld()->addObject(new GameEngine::StaticObject("blue_square.png", 100.0f, b2Vec2(10,10), game->getWorld()->getWorld(), 640, 480));
 
 		GameEngine::SpriteSheet sprite("spritesheet.png");
 	
@@ -20,10 +20,10 @@ int main(int argc, char** argv) {
 		sprite.addAnimationRow("jump", 2, 1);
 		sprite.addAnimationRow("fall", 2, 1);
 
-		GameEngine::PlayerObject* player = new GameEngine::PlayerObject(&sprite, 2.0f, 50.0f, 300.0f, game.getWorld()->getWorld(), 640, 480);
-		game.getWorld()->setActivatePlayer(player);
-		printf("%d\n", game.getWorld());
-	game.begin();
+		GameEngine::PlayerObject* player = new GameEngine::PlayerObject(&sprite, 2.0f, 50.0f, 300.0f, game->getWorld()->getWorld(), 640, 480);
+		game->getWorld()->setActivatePlayer(player);
+		printf("S %d\n", game->getWorld());
+	game->begin();
 	return 0;
 }
 
