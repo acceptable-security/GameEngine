@@ -99,7 +99,7 @@ namespace GameEngine {
 	}
 
 	void Game::initGame() { //new StaticObject(imageFile, scale, position, universe.getWorld(), windowWidth, windowHeight)
-		universe.addObject(new StaticObject("blue_square.png", 100.0f, b2Vec2(10,10), universe.getWorld(), windowWidth, windowHeight));
+		/*universe.addObject(new StaticObject("blue_square.png", 100.0f, b2Vec2(10,10), universe.getWorld(), windowWidth, windowHeight));
 
 		SpriteSheet sprite("spritesheet.png");
 	
@@ -112,7 +112,7 @@ namespace GameEngine {
 		sprite.addAnimationRow("run", 1, 9);
 		sprite.addAnimationRow("jump", 2, 1);
 		sprite.addAnimationRow("fall", 2, 1);
-		universe.setActivatePlayer(new PlayerObject(&sprite, 2.0f, 50.0f, 300.0f, universe.getWorld(), windowWidth, windowHeight));
+		universe.setActivatePlayer(new PlayerObject(&sprite, 2.0f, 50.0f, 300.0f, universe.getWorld(), windowWidth, windowHeight));*/
 	}
 
 	void Game::keyboardDown(unsigned char key, int x, int y) {
@@ -227,7 +227,6 @@ namespace GameEngine {
 
 	Game NewGame(char* title, int windowWidth, int windowHeight, int argc, char** argv) {
 		gameObject = Game(title, windowWidth, windowHeight, argc, argv);
-		printf("%d\n", &gameObject);
 		return gameObject;
 	}
 }

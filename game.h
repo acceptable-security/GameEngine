@@ -50,6 +50,8 @@ namespace GameEngine {
 	
 			void calculateFrameRate();
 			float getFrameRate();
+
+			World getWorld() { return universe; };
 	};
 	Game NewGame(char* title, int windowWidth, int windowHeight, int argc, char** argv);
 }
