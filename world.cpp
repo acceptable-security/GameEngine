@@ -18,6 +18,7 @@ namespace GameEngine {
 	}
 	
 	void World::update(bool up, bool down, bool left, bool right) {
+		printf("%d\n", this);
 		world->Step(1.0f/60.0f, 6, 2);
 		activeplayer->update(up, down, left, right);
 	}
