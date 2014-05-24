@@ -54,7 +54,6 @@ namespace GameEngine {
 	}
 
 	void PlayerObject::update(bool up, bool down, bool left, bool right) {
-		printf("STD %d\n", this);
 		b2Vec2 linVel = body->GetLinearVelocity();
 		if(up) {
 			if(linVel.y == 0) {

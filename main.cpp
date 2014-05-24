@@ -3,7 +3,7 @@
 GameEngine::Game* game;
 
 int main(int argc, char** argv) {
-	game = &GameEngine::NewGame("Neglect", 640, 480, argc, argv);
+	game = GameEngine::NewGame("Neglect", 640, 480, argc, argv);
 	printf("%d\n", game);
 	game->initGL();
 	game->initGame();

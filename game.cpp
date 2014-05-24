@@ -94,8 +94,6 @@ namespace GameEngine {
 			printf( "Error initializing OpenGL! %s\n", gluErrorString( error ) );
 			exit(0);
 		}
-		printf("A %d\n", &universe);
-		printf("%d\n", this);
 		glutMainLoop();
 	}
 
@@ -196,8 +194,6 @@ namespace GameEngine {
 		calculateFrameRate();
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_PROJECTION);
-		printf("%d\n", this);
-		printf("B %d\n", &universe);
 		universe.update(keys[0], keys[1], keys[2], keys[3]);
 		universe.render();
 
@@ -227,8 +223,8 @@ namespace GameEngine {
 		return fps;
 	}
 
-	Game NewGame(char* title, int windowWidth, int windowHeight, int argc, char** argv) {
+	Game* NewGame(char* title, int windowWidth, int windowHeight, int argc, char** argv) {
 		gameObject = Game(title, windowWidth, windowHeight, argc, argv);
-		return gameObject;
+		return &gameObject;
 	}
 }
