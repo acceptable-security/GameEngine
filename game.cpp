@@ -36,7 +36,6 @@ namespace GameEngine {
 	}
 
 	Game::Game(char* _title, int width, int height, int _argc, char** _argv) {
-		printf("Hello\n");
 		title = _title;
 	
 		originalWindowWidth = width;
@@ -98,20 +97,8 @@ namespace GameEngine {
 	}
 
 	void Game::initGame() { //new StaticObject(imageFile, scale, position, universe.getWorld(), windowWidth, windowHeight)
-		/*universe.addObject(new StaticObject("blue_square.png", 100.0f, b2Vec2(10,10), universe.getWorld(), windowWidth, windowHeight));
-
-		SpriteSheet sprite("spritesheet.png");
-	
-		sprite.initSequence("idle", 60.0f, 9.0f, 14.0f);
-		sprite.initSequence("run", 60.0f, 9.0f, 14.0f);
-		sprite.initSequence("jump", 60.0f, 9.0f, 14.0f);
-		sprite.initSequence("fall", 60.0f, 9.0f, 14.0f);
-	
-		sprite.addAnimationRow("idle", 0, 1);
-		sprite.addAnimationRow("run", 1, 9);
-		sprite.addAnimationRow("jump", 2, 1);
-		sprite.addAnimationRow("fall", 2, 1);
-		universe.setActivatePlayer(new PlayerObject(&sprite, 2.0f, 50.0f, 300.0f, universe.getWorld(), windowWidth, windowHeight));*/
+		
+		loadLevel("level1.json", &universe, windowWidth, windowHeight);
 	}
 
 	void Game::keyboardDown(unsigned char key, int x, int y) {

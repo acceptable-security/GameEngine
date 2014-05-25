@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <glut.h>
-#include "world.h"
-
+#include "level.h"
 namespace GameEngine {
 	class Game {
 		private:

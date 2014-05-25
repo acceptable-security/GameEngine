@@ -3,11 +3,12 @@
 GameEngine::Game* game;
 
 int main(int argc, char** argv) {
+
+
 	game = GameEngine::NewGame("Neglect", 640, 480, argc, argv);
-	printf("%d\n", game);
 	game->initGL();
 	game->initGame();
-		game->getWorld()->addObject(new GameEngine::StaticObject("blue_square.png", 100.0f, b2Vec2(10,10), game->getWorld()->getWorld(), 640, 480));
+		//game->getWorld()->addObject(new GameEngine::StaticObject("blue_square.png", 100.0f, b2Vec2(10,10), game->getWorld()->getWorld(), 640, 480));
 
 		GameEngine::SpriteSheet sprite("spritesheet.png");
 	
@@ -23,7 +24,6 @@ int main(int argc, char** argv) {
 
 		GameEngine::PlayerObject* player = new GameEngine::PlayerObject(&sprite, 2.0f, 50.0f, 300.0f, game->getWorld()->getWorld(), 640, 480);
 		game->getWorld()->setActivatePlayer(player);
-		printf("S %d\n", game->getWorld());
 	game->begin();
 	return 0;
 }

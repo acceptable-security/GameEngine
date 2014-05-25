@@ -1,4 +1,5 @@
 #include <Box2D/Box2D.h>
+#include <string.h>
 #include "image_test.h"
 
 namespace GameEngine {
