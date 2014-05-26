@@ -41,8 +41,8 @@ namespace GameEngine {
 			void setFrameNum(std::string sequence, int frame);
 			b2Vec2 getSequenceSize(std::string sequence);
 	
-			void initSequence(std::string, float frametime, float width, float height);
-			void addAnimationRow(std::string, int row, int size);
+			void initSequence(std::string name, float frametime, float width, float height);
+			void addAnimationRow(std::string name, int row, int size);
 			void addSequenceFrame(std::string sequence, b2Vec2 position);
 			
 			void renderPart(std::vector<b2Vec2> texCoords, int x, int y, float angle, float scale, b2Vec2 size, bool flip);

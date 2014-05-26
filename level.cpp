@@ -77,4 +77,37 @@ namespace GameEngine {
 			printf("**ERROR: Unable to load file %s\n", file);
 		}
 	}
+
+	void loadSpriteSheet(const char* file, World* world) {
+		Json::Value root;
+		Json::Reader reader;
+
+		std::string contents = get_file_contents(file);
+		const char* more = contents.c_str();
+		
+		bool parsingSuccessful = reader.parse(more, root);
+		if(parsingSuccessful) {
+			SpriteSheet* sprite = world->initSpriteSheet(root.get("name","none").asString(), root.get("image_file","none.png").asString().c_str());
+			
+			Json::Value::Members animations = root["animations"].getMemberNames();
+			Json::Value anim;
+			const char* animationname;
+			for(unsigned int i=0; i<animations.size();i++) {
+				animationname = animations[i].c_str();
+				anim = root["animations"][animationname];
+				sprite->initSequence(animationname, anim["time"].asDouble(), anim["size"][(Json::Value::ArrayIndex)0].asInt(), anim["size"][(Json::Value::ArrayIndex)1].asInt());
+				if(!anim.isMember("positions")) {
+					sprite->addAnimationRow(animationname, anim["row"].asInt(), anim["count"].asInt());
+				}
+				else {
+					for(unsigned int j=0; j<anim["positions"].size();j++) {
+						sprite->addSequenceFrame(animationname, b2Vec2(anim["positions"][j][(Json::Value::ArrayIndex)0].asInt(),anim["positions"][j][(Json::Value::ArrayIndex)1].asInt()));
+					}
+				}
+			}
+		}
+		else {
+			printf("**ERROR: Unable to load file %s\n", file);
+		}
+	}
 }

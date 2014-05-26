@@ -1,4 +1,6 @@
 #include <Box2D/Box2D.h>
+#include <string>
+#include <map>
 #include "render_list.h"
 #include "player_object.h"
 
@@ -8,6 +10,7 @@ namespace GameEngine {
 			b2World* world;
 			RenderList renderlist;
 			PlayerObject* activeplayer;
+			std::map<std::string, SpriteSheet*> spriteMap;
 		public:
 			World();
 	
@@ -21,6 +24,9 @@ namespace GameEngine {
 			void update(bool up, bool down, bool left, bool right);
 			void render();
 	
+			SpriteSheet* initSpriteSheet(std::string name, const char* file);
+			SpriteSheet* getSpritesheet(std::string name);
+
 			void clean();
 	};
 }

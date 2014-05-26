@@ -10,6 +10,9 @@ namespace GameEngine {
 		gameObject.reshape(width, height);
 	}
  
+	void _exit_redirect() {
+		gameObject.onExit();
+	}
 
 	void _timer_redirect(int value) {
 		gameObject.timer(value);
@@ -96,9 +99,9 @@ namespace GameEngine {
 		glutMainLoop();
 	}
 
-	void Game::initGame() { //new StaticObject(imageFile, scale, position, universe.getWorld(), windowWidth, windowHeight)
-		
+	void Game::initGame() {
 		loadLevel("level1.json", &universe, windowWidth, windowHeight);
+		loadSpriteSheet("spritesheet.json", &universe);
 	}
 
 	void Game::keyboardDown(unsigned char key, int x, int y) {
@@ -208,6 +211,10 @@ namespace GameEngine {
 	
 	float Game::getFrameRate() {
 		return fps;
+	}
+
+	void Game::onExit() {
+		universe.clean();
 	}
 
 	Game* NewGame(char* title, int windowWidth, int windowHeight, int argc, char** argv) {

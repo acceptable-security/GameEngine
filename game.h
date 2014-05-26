@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <map>
 #include <glut.h>
 #include "level.h"
 namespace GameEngine {
@@ -29,6 +30,7 @@ namespace GameEngine {
 			int argc;
 			char** argv;
 	
+			
 		public:
 			Game();
 			Game(char* title, int windowWidth, int windowHeight, int argc, char** argv);
@@ -49,6 +51,10 @@ namespace GameEngine {
 	
 			void calculateFrameRate();
 			float getFrameRate();
+
+
+
+			void onExit();
 
 			World* getWorld() { return &universe; };
 	};
