@@ -1,6 +1,8 @@
 #include "static_object.h" 
+#include "object.h"
 #include <glut.h>
 static float ratio = 40.0f;
+
 
 namespace GameEngine {
 	StaticObject::StaticObject(const char* _imageFile, float _scale, b2Vec2 pos, b2World* world, int wWidth, int wHeight) {
@@ -26,7 +28,11 @@ namespace GameEngine {
 		vertices[3].Set(width/ratio, 0);
 		box.Set(vertices,4);
 		body = world->CreateBody(&bodyDef);
-		body->SetUserData(this);
+		bodyData* data = new bodyData();
+		data->type = "static";
+		data->object = this;
+		body->SetUserData(data);
+		b2DataPtr = data;
 		body->CreateFixture(&box, 0.0f);
 	
 	}
@@ -46,5 +52,19 @@ namespace GameEngine {
 		glLoadIdentity();
 	
 		gLoadedTexture.render(x, y, 0.0, scale);
+	}
+
+	void StaticObject::startContact() {
+	}
+	
+	void StaticObject::endContact() {
+	}
+
+	void StaticObject::_clean() {
+		delete b2DataPtr;
+		clean();
+	}
+	
+	void StaticObject::clean() {
 	}
 }

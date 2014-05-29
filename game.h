@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <map>
 #include <glut.h>
+#include <gl/GL.h>
+#include <gl/GLU.h>
 #include "level.h"
 namespace GameEngine {
 	class Game {
@@ -30,7 +32,9 @@ namespace GameEngine {
 			int argc;
 			char** argv;
 	
-			
+			GLuint program;
+			GLuint vertex_shader;
+			GLuint fragment_shader;
 		public:
 			Game();
 			Game(char* title, int windowWidth, int windowHeight, int argc, char** argv);
@@ -52,7 +56,7 @@ namespace GameEngine {
 			void calculateFrameRate();
 			float getFrameRate();
 
-
+			void setShader(const char* vertex_file, const char* fragment_file);
 
 			void onExit();
 

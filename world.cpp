@@ -26,7 +26,7 @@ namespace GameEngine {
 		renderlist.render();
 		activeplayer->render();
 	}
-	
+
 	SpriteSheet* World::initSpriteSheet(std::string name, const char* file) {
 		spriteMap[name] = new SpriteSheet(file);
 		return spriteMap[name];
@@ -36,12 +36,17 @@ namespace GameEngine {
 		return spriteMap[name];
 	}
 
-	void World::clean() {
+	void World::clearWorld() {
 		for(std::map<std::string, SpriteSheet*>::iterator it = spriteMap.begin(); it != spriteMap.end(); ++it) {
 			delete spriteMap[it->first];
 		}
 		renderlist.clean();
-		activeplayer->clean();
+		activeplayer->_clean();
+		delete activeplayer;
+	}
+
+	void World::clean() {
+		clearWorld();
 		delete world;
 	}
 }

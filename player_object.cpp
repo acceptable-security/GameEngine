@@ -7,8 +7,8 @@ dundundun
 #include <Box2D/Box2D.h>
 #include "player_object.h"
 #include <glut.h>
+#include "object.h"
 
-//int PI = 3.14159265f;
 static float ratio = 40.0f;
 namespace GameEngine {
 	PlayerObject::PlayerObject() {
@@ -29,9 +29,13 @@ namespace GameEngine {
 		bodyDef.linearDamping = 2.0f;
 		bodyDef.fixedRotation = true;
 		bodyDef.position.Set(_x/ratio, _y/ratio);
-	
+		
 		body = world->CreateBody(&bodyDef);
-		body->SetUserData(this);
+		bodyData* data = new bodyData();
+		data->type = "player";
+		data->object = this;
+		body->SetUserData(data);
+		b2DataPtr = data;
 		vertices[0].Set(0,0);
 		vertices[1].Set(0,_height/ratio);
 		vertices[2].Set(_width/ratio, _height/ratio);
@@ -120,7 +124,18 @@ namespace GameEngine {
 			sprites.render(state, x, y, body->GetAngle() * (180.0f / 3.14159265f), scale, true);
 	}
 	
+	void PlayerObject::_clean() {
+		delete b2DataPtr;
+		clean();
+	}
+
 	void PlayerObject::clean() {
-		//do something
+		
+	}
+
+	void PlayerObject::startContact() {
+	}
+
+	void PlayerObject::endContact() {
 	}
 }

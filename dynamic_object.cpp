@@ -1,9 +1,11 @@
 #include <Box2D/Box2D.h>
 #include <glut.h>
-
+#include "object.h"
 #include "dynamic_object.h"
+
 int PI = 3.14159265f;
 static float ratio = 40.0f;
+
 namespace GameEngine {
 	DynamicObject::DynamicObject(const char* _imageFile, float _scale, b2Vec2 pos, b2World* world, int wWidth, int wHeight) {
 		scale = _scale;
@@ -21,7 +23,11 @@ namespace GameEngine {
 		bodyDef.position.Set(x/ratio, y/ratio);
 	
 		body = world->CreateBody(&bodyDef);
-		body->SetUserData(this);
+		bodyData* data = new bodyData();
+		data->type = "dynamic";
+		data->object = this;
+		body->SetUserData(data);
+		b2DataPtr = data;
 		vertices[0].Set(0,0);
 		vertices[1].Set(0,height/ratio);
 		vertices[2].Set(width/ratio, height/ratio);
@@ -52,14 +58,27 @@ namespace GameEngine {
 		
 		box.SetAsBox((_width/2.0)/ratio, (_height/2.0)/ratio);
 	}
-	
-	void DynamicObject::debug() {
-		printf("RECT (%d, %d, %d, %d)\n", x, y, width, height);
-	}
-	
 	void DynamicObject::render() {
+		drawImage();
+	}
+
+	void DynamicObject::drawImage() {
 		x = body->GetPosition().x*ratio;
 		y = body->GetPosition().y*ratio;
 		gLoadedTexture.render(x,y, body->GetAngle() * (180.0f / PI), scale);
+	}
+
+	void DynamicObject::_clean() {
+		delete b2DataPtr;
+		clean();
+	}
+
+	void DynamicObject::clean() {
+	}
+
+	void DynamicObject::startContact() {
+	}
+
+	void DynamicObject::endContact() {
 	}
 }

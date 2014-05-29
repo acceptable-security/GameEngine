@@ -1,7 +1,7 @@
-#include "game.h"
+﻿#include "game.h"
 namespace GameEngine {
 	Game gameObject;
-
+	GameContactListener myContactListenerInstance;
 	void _display_redirect() {
 		gameObject.display();
 	}
@@ -78,6 +78,7 @@ namespace GameEngine {
 		glutSpecialFunc(_specialKeys_redirect);
 		glutKeyboardUpFunc(_keyboardUp_redirect);	
 		glutKeyboardFunc(_keyboardDown_redirect);
+		printf("*** Initializing GL Version: %s\n", (const char*)glGetString​(GL_VERSION​));
 		if(fullScreenMode)
 			glutFullScreen();
 		glutMouseFunc(_mouse_redirect);
@@ -87,6 +88,9 @@ namespace GameEngine {
 	}
 
 	void Game::begin() {
+		
+		universe.getWorld()->SetContactListener(&myContactListenerInstance);
+
 		glLoadIdentity();
 		glMatrixMode(GL_PROJECTION);
 		glOrtho(0.0f,windowWidth,0.0f,windowHeight,0.0f,1.0f);
@@ -101,7 +105,8 @@ namespace GameEngine {
 
 	void Game::initGame() {
 		loadLevel("level1.json", &universe, windowWidth, windowHeight);
-		loadSpriteSheet("spritesheet.json", &universe);
+		PlayerObject* player = new PlayerObject(universe.getSpritesheet("playersprites"), 2.0f, 50.0f, 300.0f, universe.getWorld(), 640, 480);
+		universe.setActivatePlayer(player);
 	}
 
 	void Game::keyboardDown(unsigned char key, int x, int y) {
@@ -215,6 +220,11 @@ namespace GameEngine {
 
 	void Game::onExit() {
 		universe.clean();
+	}
+
+	void Game::setShader(const char* veretx_file, const char* fragment_file) {
+		char *vs, *fs;
+		//vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 	}
 
 	Game* NewGame(char* title, int windowWidth, int windowHeight, int argc, char** argv) {

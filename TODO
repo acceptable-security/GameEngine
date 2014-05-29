@@ -1,0 +1,6 @@
+- Players (from JSON?)
+- Make Dynamic, Static, and Player Objects Subclassable (so you can do class Whatever : PlayerObject {})
+- Implement Lua, Python, and JavaScript.
+- Particle and Emitter System (basic physics?)
+- Sound System
+- Dynamic Lighting System

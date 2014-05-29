@@ -38,7 +38,14 @@ namespace GameEngine {
 				
 			const char* background = root.get("background-image", "none.png").asCString();
 			const char* name = root.get("name", "Unnamed Level").asCString();
-				
+			
+			const Json::Value sprites = root["spritesheets"];
+			std::string sprite;
+			for(unsigned int i=0;i<sprites.size();i++) {
+				sprite = sprites[(Json::Value::ArrayIndex)i].asString();
+				loadSpriteSheet(sprite.c_str(), world);
+			}
+
 			const Json::Value objects = root["objects"];
 			Json::Value obj;
 			
