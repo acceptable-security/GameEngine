@@ -131,15 +131,14 @@ namespace GameEngine {
 		}
 
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-		glStencilFunc(GL_EQUAL, 1, 1);
+		glStencilFunc(GL_EQUAL, 0, 1);
 		glColorMask(true, true, true, true);
 
 		glUseProgram(shader);
 		glUniform2f(glGetUniformLocation(shader,"lightpos"), x, y);
-		glUniform3f(glGetUniformLocation(shader,"lightColor"), 1.0, 0.0, 0.0);
+		glUniform3f(glGetUniformLocation(shader,"lightColor"), 1.0, 0.0, 1.0);
 		glUniform1f(glGetUniformLocation(shader,"screenHeight"), windowHeight);
-		//glUniform3f(glGetUniformLocation(shader,"lightAttenuation"), 10,7,3); // example valuese for now.
-		//glUniform1f(glGetUniformLocation(shader,"radius"), 10);
+		glUniform1f(glGetUniformLocation(shader,"radius"), 10);
 
 
 		glBegin(GL_QUADS); {

@@ -94,7 +94,7 @@ namespace GameEngine {
 		glLoadIdentity();
 		glMatrixMode(GL_PROJECTION);
 		glOrtho(0.0f,windowWidth,0.0f,windowHeight,0.0f,1.0f);
-		glClearColor(1.0, 1.0, 1.0, 1.0);
+		glClearColor(0.0, 0.0, 0.0, 0.0);
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR) {
 			printf( "***Error initializing OpenGL! %s\n", gluErrorString( error ) );
