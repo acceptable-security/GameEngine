@@ -1,6 +1,5 @@
 #ifndef imgtest
 #define imgtest
-#define GL_CLAMP_TO_EDGE 0x812f
 #include "stb_image.h"
 #include <string>
 #include <glut.h>

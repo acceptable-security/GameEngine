@@ -78,6 +78,7 @@ namespace GameEngine {
 			void addObject(DynamicObject* object);
 	
 			b2World* getWorld() { return world; };
+			RenderList* getRenderList() { return &renderlist; }
 	
 			void setActivatePlayer(PlayerObject* player);
 	

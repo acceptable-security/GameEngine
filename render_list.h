@@ -11,6 +11,9 @@ namespace GameEngine {
 			RenderList();
 			void add(DynamicObject* obj);
 			void add(StaticObject* obj);
+
+			std::vector<DynamicObject*>* getDynamicObjects() { return &dynamicObjectList; };
+			std::vector<StaticObject*>* getStaticObjects() { return &staticObjectList; };
 	
 			void render();
 			void clean();

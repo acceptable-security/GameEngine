@@ -20,7 +20,6 @@ STAY GOLDEN
 
 //#ifndef sprites
 //#define sprites
-#define GL_CLAMP_TO_EDGE 0x812f
 namespace GameEngine {
 	class SpriteSheet {
 		private:
